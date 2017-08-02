@@ -14,7 +14,7 @@ RUN apt-get update
 RUN apt-get install -y google-chrome-stable
 
 # Set up ChromeDriver environment variables
-ENV CHROMEDRIVER_VERSION 2.9
+ENV CHROMEDRIVER_VERSION 2.31
 ENV CHROMEDRIVER_DIR /chromedriver
 
 # Download and install ChromeDriver
@@ -29,3 +29,5 @@ RUN apt-get install -y ruby bundler git
 RUN gem install watir
 
 ADD simple.e2e.rb /spec/simple.e2e.rb
+
+CMD xvfb-run chrome -a
