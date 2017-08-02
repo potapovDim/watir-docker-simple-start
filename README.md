@@ -1,10 +1,9 @@
-# watir firefox(iceweasel) in docker via X virtual framebuffer 
-
+# watir 
 ##try it 
 
 ## build container
 ```
-docker build .
+docker build . in chrome of firefox dir
 ```
 ## running the sample test
 ```
