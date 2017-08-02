@@ -1,9 +1,8 @@
 # Starting from Ubuntu Xenial
-FROM ubuntu:xenial
+FROM debian:jessie
 
 # We need wget to set up the PPA, Xvfb to have a virtual screen and unzip to extract ChromeDriver
-RUN apt-get update
-RUN apt-get install -y wget xvfb unzip zlib1g-dev
+RUN apt-get update && apt-get install -y curl xvfb chromium wget xvfb unzip zlib1g-dev ruby bundler git libxi6 libgconf-2-4
 
 # Set up the Chrome PPA
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
@@ -24,13 +23,16 @@ RUN unzip $CHROMEDRIVER_DIR/chromedriver* -d $CHROMEDRIVER_DIR
 
 # Put ChromeDriver into the PATH
 ENV PATH $CHROMEDRIVER_DIR:$PATH
-RUN apt-get install -y ruby bundler git
 RUN gem install watir
 RUN gem install chromedriver-helper
 
+RUN chmod +x $CHROMEDRIVER_DIR/chromedriver*
 ADD simple.e2e.rb /spec/simple.e2e.rb
 
-ADD xvfb-setup /usr/bin/xvfb-setup
-RUN chmod +x /usr/bin/xvfb-setup
+ADD driver-setup /usr/bin/driver-setup
+RUN chmod +x /usr/bin/driver-setup
 
-CMD usr/bin/xvfb-setup
+ADD xvfb-setup /usr/bin/xvfb-setup
+
+RUN ln -s /usr/bin/xvfb-setup /usr/bin/chrome-stable
+RUN ln -s /usr/bin/xvfb-setup /usr/bin/chrome
